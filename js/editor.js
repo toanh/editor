@@ -1,3 +1,50 @@
+var storeURL = "https://limitless-plains-92704.herokuapp.com/";
+function getCodestoreURL() {
+	document.getElementById("url").text = "Generating URL...";
+	document.getElementById("url").href = "";
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", storeURL + 'dbput', true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	xhr.onerror = function() {
+		console.log("Error");
+		console.log(this);
+	}
+	xhr.onreadystatechange = function() {
+	  if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+		if (xhr.responseText.length == 0) {
+		  alert("There was an error generating your URL, please save your code to a file instead.");
+		}
+		codeurl = window.location.toString();
+		codeurl = codeurl.split('?')[0] + "?";
+		delimit = "";
+		// TODO: improve this!
+		// need to be more dynamic in reconstructing
+		// URL based on existing params and the
+		// presence of existing ids
+		urlParams.forEach(function(value, key) {
+		  if (key != "id" && key !== "undefined") {
+			codeurl = codeurl + "&" + key + "=" + value;
+		  }
+		});
+		
+		codeurl += "&id=" + xhr.responseText; 
+		
+		document.getElementById("url").text = codeurl;
+		document.getElementById("url").href = codeurl;
+	  }
+	}
+	var code = ace.edit("editor").getValue();
+
+	saveToLocalStorage();
+	sendURL = "code="+ encodeURIComponent(code);
+	if (id !== null) {
+		sendURL += "&id=" + id;
+	}
+
+	xhr.send(sendURL);            
+}
+ 
 function clearConsole()
 {
 	var clearButton = document.getElementById("consoleClear");
@@ -9,8 +56,6 @@ function clearConsole()
 		inputElement.innerText = "";
 		pyConsole.appendChild(inputElement);
 	}
-
-
 }
 
 /* When the openFullscreen() function is executed, open the video in fullscreen.
@@ -21,7 +66,6 @@ function openFullscreen() {
 		(document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
 		(document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
 		(document.msFullscreenElement && document.msFullscreenElement !== null);
-
 
 	if (!isInFullScreen) {
 		var docElm = document.documentElement;
@@ -109,27 +153,6 @@ function generateURL()
 	url = url + "?code=" + encodeToUTF16(ace.edit("editor").getValue());
 
 	copyToClipboard(url, "URL copied to clipboard.", "Unable to copy URL to clipboard. Please copy the URL below manually: \n" + url);
-}
-
-function getCookie()
-{
-	alert(document.cookie);
-}
-
-function setCookie()
-{
-	document.cookie = "username=John Doe; Secure; SameSite=Lax";
-}
-
-function getURL()
-{
-	alert(window.location.href);
-}
-
-function setURL()
-{
-	// alert('setting URL')
-	window.location.href = document.getElementById("setURLInput").value;
 }
 
 function copyCode()
@@ -559,7 +582,7 @@ function setDisplayMode(mode)
 		// we're in canvas demo mode
 		document.getElementById('leftpane').appendChild(document.getElementById('editor'));
 		document.getElementById('rightpane').appendChild(document.getElementById('pyangelo'));
-		document.getElementById('bottompane').appendChild(document.getElementById('console'));
+		document.getElementById('bottompane').appendChild(document.getElementById('consoleWrapper'));
 
 		document.getElementById('bottompane').style = "display:block; height: " + prefixedCalc() + "(100% - 580px);";
 
@@ -571,7 +594,7 @@ function setDisplayMode(mode)
 		//document.getElementById('editor').style.height = "100%";
 		document.getElementById('editor').style.height = "500px";
 
-		document.getElementById('console').style = "height: 200px";
+		document.getElementById('consoleWrapper').style = "height: 200px";
 		//document.getElementById('console').style = "height: 100%";
 
 		document.getElementById('pyangelo').style = "display:block";
@@ -598,14 +621,14 @@ function setDisplayMode(mode)
 
 		document.getElementById('editor').style.width = "100%";
 		document.getElementById('editor').style.height = "100%";
-		document.getElementById('console').style.width = "100%";
-		document.getElementById('console').style.height = "100%";
+		document.getElementById('consoleWrapper').style.width = "100%";
+		document.getElementById('consoleWrapper').style.height = "100%";
 
 		document.getElementById('leftpane').appendChild(document.getElementById('editor'));
-		document.getElementById('rightpane').appendChild(document.getElementById('console'));
+		document.getElementById('rightpane').appendChild(document.getElementById('consoleWrapper'));
 		document.getElementById('bottompane').appendChild(document.getElementById('pyangelo'));
 
-		Split(['#leftpane', '#rightpane'], {direction: 'vertical',})
+		Split(['#leftpane', '#rightpane'], {direction: 'vertical', minSize: [128, 128], snapOffset: 0,})
 
 		document.getElementById('rightpane').style.width = "100%";
 		document.getElementById('leftpane').style.width = "100%";
@@ -628,14 +651,14 @@ function setDisplayMode(mode)
 
 		document.getElementById('editor').style.width = "100%";
 		document.getElementById('editor').style.height = "100%";
-		document.getElementById('console').style.width = "100%";
-		document.getElementById('console').style.height = "100%";
+		document.getElementById('consoleWrapper').style.width = "100%";
+		document.getElementById('consoleWrapper').style.height = "100%";
 
-		document.getElementById('leftpane').appendChild(document.getElementById('console'));
+		document.getElementById('leftpane').appendChild(document.getElementById('consoleWrapper'));
 		document.getElementById('rightpane').appendChild(document.getElementById('editor'));
 		document.getElementById('bottompane').appendChild(document.getElementById('pyangelo'));
 
-		Split(['#leftpane', '#rightpane'], {direction: 'vertical',})
+		Split(['#leftpane', '#rightpane'], {direction: 'vertical', minSize: [128, 128], snapOffset: 0,})
 
 		document.getElementById('rightpane').style.width = "100%";
 		document.getElementById('leftpane').style.width = "100%";
@@ -655,17 +678,17 @@ function setDisplayMode(mode)
 		//document.getElementById('split').style.height = "100%";
 		document.getElementById('split').style.height = prefixedCalc() + "(100% - 80px)";
 		document.getElementById('editor').style.height = "100%";
-		document.getElementById('console').style.height = "100%";
+		document.getElementById('consoleWrapper').style.height = "100%";
 
 		document.getElementById('rightpane').style.height = "100%;"
 		document.getElementById('leftpane').style.height = "100%";
 		document.getElementById('bottompane').style = "display:none";
 
 		document.getElementById('leftpane').appendChild(document.getElementById('editor'));
-		document.getElementById('rightpane').appendChild(document.getElementById('console'));
+		document.getElementById('rightpane').appendChild(document.getElementById('consoleWrapper'));
 		document.getElementById('bottompane').appendChild(document.getElementById('pyangelo'));
 
-		Split(['#leftpane', '#rightpane'])
+		Split(['#leftpane', '#rightpane'], {direction: 'horizontal', minSize: [128, 128], snapOffset: 0,})
 
 		new ResizeObserver(function(entries) {
 			// needed so that resizing the divider forces a resize on the window
@@ -773,6 +796,23 @@ if (esc != null && esc.length > 0)
 	setDisplayMode(usingPyangelo ? "canvas": display);
 	editor.setValue(codeString, -1);
 	//document.getElementById("editor").innerHTML = codeString;
+}
+
+// code store id
+var id = urlParams.get('id');
+
+if (id != null && id.length > 0) {
+  var xhr2 = new XMLHttpRequest();
+  xhr2.open("GET", storeURL + 'dbget?id=' + id, true);
+  xhr2.onreadystatechange = function() { 
+	  if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+		codeString = xhr2.responseText;
+		usingPyangelo = checkForPyangelo(codeString);
+		setDisplayMode(usingPyangelo ? "canvas": display);
+		editor.setValue(codeString, -1);
+	  }
+  }
+  xhr2.send();   
 }
 
 // project mode: load from code from existing .py file under /projects
@@ -917,3 +957,5 @@ var _stopped = false;
 var inputElement = null;
 
 resetCanvas();
+
+document.getElementsByClassName('gutter')[0].style.zIndex = 10;

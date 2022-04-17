@@ -104,7 +104,7 @@ function inputf(n) {
                 inputElement = document.createElement("span");
                 inputElement.setAttribute("contenteditable", "true");
                 inputElement.style.color = "rgb(255,255,255)";
-                inputElement.style.fontSize = "14pt";
+                inputElement.style.fontSize = "12pt";
                 inputElement.style.outlineStyle = "none";
                 pyConsole.appendChild(inputElement);
                 inputElement.focus();
@@ -128,7 +128,7 @@ var fontBgColour = "rgba(0, 0, 0, 1)";
 var fontItalics = false;
 var fontBold = false;
 var fontUnderlined = false;
-var fontSize = "14pt";
+var fontSize = "12pt";
 
 function resetConsole()
 {
@@ -137,7 +137,7 @@ function resetConsole()
     fontItalics = false;
     fontBold = false;
     fontUnderlined = false;
-    fontSize = "14pt";    
+    fontSize = "12pt";    
     clearConsole();
 }
 

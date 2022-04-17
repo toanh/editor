@@ -26,6 +26,9 @@
             <button id="URLButton" type="button" onclick="generateURL();" style = "width:72px">URL</button>
             <button id="embedButton" type="button" onclick="generateEmbed();" style = "width:72px">Embed</button>
             <button id="fullscreenButton" type="button" onclick="openFullscreen();" style = "width:104px">🖥️ Fullscreen</button>
+			<button id="codestoreURL" type="button" onclick="getCodestoreURL();" style = "width:104px">🔗 Get URL</button>
+			<br>
+			<a href id="url"></a>
         </form>
         <div class="split" id="split">
             <div id ="leftpane"></div>
@@ -34,7 +37,7 @@
         <div id ="bottompane"></div>
 
         <div id="editor" style = "border: 1px solid black"># Your amazing code goes here!</div>
-        <pre id="console" onclick="if (inputElement != null) inputElement.focus();"><div id="consoleClear" onclick="clearConsole();" style="cursor: pointer;">X</div></pre>
+        <div id="consoleWrapper"><pre id="console" onclick="if (inputElement != null) inputElement.focus();"><div id="consoleClear" onclick="clearConsole();" style="cursor: pointer;">X</div></pre></div>
 
         <canvas id="pyangelo" height = 500 width = 330 style="border: 1px solid black; flex: 1 1 0px;" tabindex='1'></canvas>
     </div>
