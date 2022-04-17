@@ -44,6 +44,13 @@ function getCodestoreURL() {
 
 	xhr.send(sendURL);            
 }
+
+function setTrainingWheels() {
+	if (document.getElementById("trainingWheels").checked)
+		urlParams.set('wheels', 1)
+	else
+		urlParams.delete('wheels', 1)
+}
  
 function clearConsole()
 {
@@ -424,7 +431,9 @@ function runSkulpt(stepMode) {
 
 	saveToLocalStorage();
 
-	code = pygmify(code);
+	code = stripPeriodFromGoto(code);
+	if (document.getElementById("trainingWheels").checked)
+		code = pygmify(code);
 	usingPyangelo = checkForPyangelo(code);
 	setDisplayMode(usingPyangelo ? "canvas": display);
 	if (usingPyangelo) document.getElementById("pyangelo").focus();
@@ -950,6 +959,12 @@ nofs = urlParams.get('nofs')
 if (nofs != null && nofs.length > 0)
 {
 	fsButton.style.display = "none";
+}
+
+// no full screen (if unsupported by other widgets etc.)
+wheels = urlParams.get('wheels')
+if (wheels != null && wheels.length > 0) {
+	document.getElementById("trainingWheels").checked = true;
 }
 
 var just_run = false;
