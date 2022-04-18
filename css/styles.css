@@ -3,8 +3,8 @@
 	border-top:2px solid #000;
 	border-right:2px solid #000;
 	border-left:2px solid #000;
-	background-color:#000;
-	color:#fff;
+	//background-color:#000;
+	//color:#fff;
 	padding:10px 10px 5px;
 }
 #consoleWrapper {
@@ -30,6 +30,10 @@
 	background: rgba(255, 255, 255, 0.7);
 	top:1;
 	left: calc(100% - 18px);
+}
+body {
+	font-family: arial;
+	font-size: 10pt;
 }
 .split {
 	display: flex;

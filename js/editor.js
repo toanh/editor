@@ -38,9 +38,12 @@ function getCodestoreURL() {
 
 	saveToLocalStorage();
 	sendURL = "code="+ encodeURIComponent(code);
+	// update existing id if exists - comment out for new URL everytime
+	/*
 	if (id !== null) {
 		sendURL += "&id=" + id;
 	}
+	*/
 
 	xhr.send(sendURL);            
 }
@@ -49,7 +52,18 @@ function setTrainingWheels() {
 	if (document.getElementById("trainingWheels").checked)
 		urlParams.set('wheels', 1)
 	else
-		urlParams.delete('wheels', 1)
+		urlParams.delete('wheels')
+}
+
+function setTheme() {
+	if (document.getElementById("lightTheme").checked) {
+		urlParams.set('light', 1);
+		editor.setTheme("ace/theme/eclipse");
+	}
+	else {
+		editor.setTheme("ace/theme/monokai");
+		urlParams.delete('light')
+	}
 }
  
 function clearConsole()
@@ -760,6 +774,7 @@ function resetEditor()
 var pyConsole = document.getElementById("console");
 
 var editor = ace.edit("editor");
+var darkTheme = true;
 editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/python");
 editor.setOptions({
@@ -805,6 +820,16 @@ if (esc != null && esc.length > 0)
 	setDisplayMode(usingPyangelo ? "canvas": display);
 	editor.setValue(codeString, -1);
 	//document.getElementById("editor").innerHTML = codeString;
+}
+
+// dark/light theme
+light = urlParams.get('light')
+if (light != null && light.length > 0) {
+	editor.setTheme("ace/theme/eclipse");
+	document.getElementById("lightTheme").checked = true;
+}
+else {
+	editor.setTheme("ace/theme/monokai");
 }
 
 // code store id

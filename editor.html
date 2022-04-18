@@ -5,6 +5,8 @@
     <script src="js/skulpt-stdlib.js" type="text/javascript"></script>
     <script src="js/pygmi.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/console.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/theme-eclipse.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/FileSaver.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/split.min.js" type="text/javascript" charset="utf-8"></script>
@@ -27,6 +29,7 @@
             <button id="embedButton" type="button" onclick="generateEmbed();" style = "width:72px">Embed</button>
             <button id="fullscreenButton" type="button" onclick="openFullscreen();" style = "width:104px">🖥️ Fullscreen</button>
 			<button id="codestoreURL" type="button" onclick="getCodestoreURL();" style = "width:104px">🔗 Get URL</button>
+			<input id="lightTheme" type="checkbox" onclick="setTheme()">Light Theme</input>
 			<input id="trainingWheels" type="checkbox" onclick="setTrainingWheels()">Use Training Wheels</input>
 			<br>
 			<a href id="url"></a>
