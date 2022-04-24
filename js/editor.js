@@ -1,15 +1,52 @@
-var storeURL = "https://limitless-plains-92704.herokuapp.com/";
+//var storeURL = "https://limitless-plains-92704.herokuapp.com/";
+var storeURL = "https://gcs.csinschoolsatse.repl.co/";
+
+var animID = null;
+
+var dots = 0;
+var origMsg = "Generating URL"
+var prevTime = null;
+function animateURL(timestamp) {
+	if (prevTime == null) {
+		prevTime = timestamp;
+	}
+	if (timestamp - 400 > prevTime) {
+		prevTime = timestamp;
+		msg = document.getElementById("urlmsg").innerText;
+		
+		if (dots < 3) {
+			dots += 1;
+			msg = ">" + msg + "<";
+		}
+		else {
+			msg = origMsg;
+			dots = 0;
+		}
+		document.getElementById("urlmsg").innerText = msg;
+	}
+	animID = window.requestAnimationFrame(animateURL);
+}
 function getCodestoreURL() {
-	document.getElementById("url").text = "Generating URL...";
-	document.getElementById("url").href = "";
+	document.getElementById("urlmsg").innerText = origMsg;
+	document.getElementById("urlmsg").style.display = "block";
+	document.getElementById("url").style.display = "none";
+	document.getElementById("urlerr").style.display = "none";
+	dots = 0;
+	animID = window.requestAnimationFrame(animateURL);
+	
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", storeURL + 'dbput', true);
+	xhr.open("POST", storeURL + 'put', true);
 	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
 	xhr.onerror = function() {
 		console.log("Error");
+		window.cancelAnimationFrame(animID);
+		document.getElementById("urlmsg").style.display = "none";
+		document.getElementById("url").style.display = "none";
+		document.getElementById("urlerr").style.display = "block";
 		console.log(this);
 	}
+	
 	xhr.onreadystatechange = function() {
 	  if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
 		if (xhr.responseText.length == 0) {
@@ -18,10 +55,7 @@ function getCodestoreURL() {
 		codeurl = window.location.toString();
 		codeurl = codeurl.split('?')[0] + "?";
 		delimit = "";
-		// TODO: improve this!
-		// need to be more dynamic in reconstructing
-		// URL based on existing params and the
-		// presence of existing ids
+
 		urlParams.forEach(function(value, key) {
 		  if (key != "id" && key !== "undefined") {
 			codeurl = codeurl + "&" + key + "=" + value;
@@ -32,6 +66,10 @@ function getCodestoreURL() {
 		
 		document.getElementById("url").text = codeurl;
 		document.getElementById("url").href = codeurl;
+		document.getElementById("urlmsg").style.display = "none";
+		document.getElementById("url").style.display = "block";
+		document.getElementById("urlerr").style.display = "none";
+		window.cancelAnimationFrame(animID);
 	  }
 	}
 	var code = ace.edit("editor").getValue();
@@ -66,8 +104,7 @@ function setTheme() {
 	}
 }
  
-function clearConsole()
-{
+function clearConsole() {
 	var clearButton = document.getElementById("consoleClear");
 
 	pyConsole.innerHTML = "";
@@ -837,7 +874,7 @@ var id = urlParams.get('id');
 
 if (id != null && id.length > 0) {
   var xhr2 = new XMLHttpRequest();
-  xhr2.open("GET", storeURL + 'dbget?id=' + id, true);
+  xhr2.open("GET", storeURL + 'get?id=' + id, true);
   xhr2.onreadystatechange = function() { 
 	  if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
 		codeString = xhr2.responseText;
