@@ -45,7 +45,7 @@ function outputf(n) {
         {
             i++;
             if (text.length > 0)
-                pyConsole.appendChild(createColouredTextSpanElement(text, color, bgcolor, italics, bold, underlined));                
+                pyConsole.appendChild(createColouredTextSpanElement(text));                
             text = "";
             
             var escPattern = /\[ (\d+);2;(\d+);(\d+);(\d+) m/;                          
